@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
+import ImageUpload from "../custom ui/ImageUpload";
 
 const formSchema = z.object({
   title: z.string().min(2).max(20),
@@ -44,7 +45,7 @@ const CollectionForm = () => {
       <Separator className="bg-grey-1 mt-4 mb-7" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
+          <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
@@ -77,6 +78,11 @@ const CollectionForm = () => {
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
+                  <ImageUpload
+                    value={field.value ? [field.value] : []}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange("")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
