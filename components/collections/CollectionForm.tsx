@@ -19,7 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import ImageUpload from "../custom ui/ImageUpload";
-
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   title: z.string().min(2).max(20),
@@ -28,7 +29,10 @@ const formSchema = z.object({
 });
 
 const CollectionForm = () => {
-  const router =useRouter();
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,7 +43,27 @@ const CollectionForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/collections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },//
+        body: JSON.stringify(values),
+      });
+
+      if (res.ok) {
+        toast.success("Collection created");
+        router.push("/collections");
+      } else {
+        const error = await res.json();
+        toast.error(error.message || "Error occurred");//
+      }
+    } catch (err) {
+      console.error("[CollectionForm Error]:", err);
+      toast.error("Something went wrong! Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -92,8 +116,16 @@ const CollectionForm = () => {
             )}
           />
           <div className="flex gap-10">
-          <Button type="submit" className="bg-blue-1 text-white">Submit</Button>
-          <Button type="button" onClick={() => router.push("/collections")} className="bg-blue-1 text-white">Discard</Button>
+            <Button type="submit" className="bg-blue-1 text-white">
+              Submit
+            </Button>
+            <Button
+              type="button"
+              onClick={() => router.push("/collections")}
+              className="bg-blue-1 text-white"
+            >
+              Discard
+            </Button>
           </div>
         </form>
       </Form>
