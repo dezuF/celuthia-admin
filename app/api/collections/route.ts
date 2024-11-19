@@ -14,14 +14,12 @@ export const POST = async (req: NextRequest) => {
 
     const { title, description, image } = await req.json();
 
-    // Validación inicial
     if (!title || !image) {
       return new NextResponse("Title and image are required", { status: 400 });
     }
 
     await connectToDB();
 
-    // Evitar duplicados
     const existingCollection = await Collection.findOne({ title });
 
     if (existingCollection) {
@@ -29,12 +27,25 @@ export const POST = async (req: NextRequest) => {
     }
 
     const newCollection = new Collection({ title, description, image });
-    
+
     await newCollection.save();
 
     return NextResponse.json(newCollection, { status: 200 });
   } catch (err) {
     console.error("[collections_POST]", err);
     return new NextResponse("Internal Server Error", { status: 500 });
+  }
+};
+
+export const GET = async () => {
+  try {
+    await connectToDB();
+
+    const collections = await Collection.find(); // Trae todas las colecciones.
+
+    return NextResponse.json(collections, { status: 200 });
+  } catch (err) {
+    console.log("[collections_GET]", err);
+    return new NextResponse("Failed to fetch collections", { status: 500 });
   }
 };
