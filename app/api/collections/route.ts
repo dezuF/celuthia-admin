@@ -35,17 +35,17 @@ export const POST = async (req: NextRequest) => {
     console.error("[collections_POST]", err);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
-};
+}
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   try {
     await connectToDB();
 
-    const collections = await Collection.find(); // Trae todas las colecciones.
+    const collections = await Collection.find().sort({ createdAt: -1 }); // Trae todas las colecciones.
 
     return NextResponse.json(collections, { status: 200 });
   } catch (err) {
     console.log("[collections_GET]", err);
-    return new NextResponse("Failed to fetch collections", { status: 500 });
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
-};
+}

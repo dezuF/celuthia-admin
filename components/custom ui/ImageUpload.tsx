@@ -16,7 +16,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   value,
 }) => {
   const onSuccess = (result: any) => {
-    //se cambio onUpload por onSuccess
     onChange(result.info.secure_url);
   };
 

@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import { columns } from "@/components/collections/CollectionColumns";
 import { DataTable } from "@/components/custom ui/DataTable";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useRouter } from "next/navigation";
 
 const Collections = () => {
   const [loading, setLoading] = useState(true);
