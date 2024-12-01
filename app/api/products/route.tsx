@@ -5,19 +5,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
     try {
-        const { userId } = await auth ()
+        const { userId } = await auth ();
 
-        if (!userId){
-            return new NextResponse ("Unauthorizes", { status: 401 });
-        }
-        
-        await connectToDB()//
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 403 });
+          }
 
         const { title, description, media, category, collections, tags, sizes, colors, price, expense} = await req.json();
 
         if(!title || !description || !media || !category || !price || !expense){
             return new NextResponse("Not enough data to create a product", {status: 400 });
         }
+        
+        await connectToDB();
 
         const newProduct = await Product.create({
             title,
