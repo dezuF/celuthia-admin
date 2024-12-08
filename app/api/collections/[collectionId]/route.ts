@@ -27,7 +27,7 @@ export const GET = async (
     }
   };
 
-  export const PUT = async (
+  export const POST = async (
     req: NextRequest,
     { params }: { params: { collectionId: string } }
   ) => {
@@ -58,7 +58,7 @@ export const GET = async (
         { new: true }
       );
 
-      await collection.save();
+      //await collection.save();
 
       return NextResponse.json(collection, { status: 200 });
     } catch (err) {

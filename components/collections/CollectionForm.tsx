@@ -62,7 +62,7 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
       const method = initialData ? "PUT" : "POST"; 
 
       const res = await fetch(url, {
-        method, 
+        method: "POST", 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values), 
       });
@@ -89,7 +89,7 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
       {initialData ? (
         <div className="flex items-center justify-between">
           <p className="text-heading2-bold">Edit Collection</p>
-          <Delete id={initialData._id} />
+          <Delete id={initialData._id} item="cocollection" />
         </div>
       ) : (
         <p className="text-heading2-bold">Create Collection</p>
