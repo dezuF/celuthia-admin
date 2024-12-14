@@ -17,4 +17,7 @@ const Customers = async () => {
     </div>
   );
 };
+
+export const dynamic = "force-dynamic";
+
 export default Customers;

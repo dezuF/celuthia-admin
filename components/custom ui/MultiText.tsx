@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
@@ -26,7 +26,6 @@ const MultiText: React.FC<MultiTextProps> = ({
     setInputValue("");
   };
 
-
   return (
     <>
       <Input
@@ -44,10 +43,11 @@ const MultiText: React.FC<MultiTextProps> = ({
       <div className="flex gap-1 flex-wrap mt-4">
         {value.map((item, index) => (
           <Badge key={index} className="bg-grey-1 text-white">
-            {item}{" "}
+            {item}
             <button
               className="ml-1 rounded-full outline-none hover:bg-red-1"
               onClick={() => onRemove(item)}
+              type="button"
             >
               <X className="h-3 w-3" />
             </button>

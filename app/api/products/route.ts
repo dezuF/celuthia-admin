@@ -10,7 +10,7 @@ export const POST = async (req: NextRequest) => {
     const { userId } = await auth();
 
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 403 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const {

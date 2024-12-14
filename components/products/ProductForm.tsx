@@ -110,19 +110,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
 
       const res = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
 
       if (res.ok) {
         setLoading(false);
         toast.success(`Product ${initialData ? "updated" : "created"}`);
-        window.location.href= "/products";
-        router.push("/products"); 
+        window.location.href = "/products";
+        router.push("/products");
       } else {
         setLoading(false);
-        const error = await res.json();
-        toast.error(error.message || "Something went wrong! Please try again.");
+        toast.error("Something went wrong! Please try again.");
       }
     } catch (err) {
       console.error("[ProductForm Error]:", err);
@@ -130,9 +128,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
       toast.error("An unexpected error occurred!");
     }
   };
-
-  console.log("initianlData", initialData);
-  console.log("collections", collections);
 
   return loading ? (
     <Loader />

@@ -26,7 +26,8 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse("Collection already exists", { status: 400 });
     }
 
-    const newCollection = new Collection({ title, description, image });
+    const newCollection = await Collection.create({title,description,image, });
+    
 
     await newCollection.save();
 
@@ -41,7 +42,7 @@ export const GET = async (req: NextRequest) => {
   try {
     await connectToDB();
 
-    const collections = await Collection.find().sort({ createdAt: -1 }); // Trae todas las colecciones.
+    const collections = await Collection.find().sort({ createdAt: "desc" });
 
     return NextResponse.json(collections, { status: 200 });
   } catch (err) {
@@ -49,3 +50,5 @@ export const GET = async (req: NextRequest) => {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+export const dynamic = "force-dynamic";

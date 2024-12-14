@@ -10,8 +10,8 @@ import { ToasterProvider } from "@/lib/ToasterProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Celuthia - Admin Dashboard", //Celuthia - Panel de administracion
-  description: "Admin dashboard to manage Celuthia's data", //Panel de administracion para gestionar los datos de Celuthia
+  title: "Celuthia - Admin Dashboard", 
+  description: "Admin dashboard to manage Celuthia's data", 
 };
 
 export default function RootLayout({

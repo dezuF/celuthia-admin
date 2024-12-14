@@ -62,7 +62,7 @@ export const POST = async (
       { new: true }
     );
 
-    //await collection.save();
+    await collection.save();
 
     return NextResponse.json(collection, { status: 200 });
   } catch (err) {
