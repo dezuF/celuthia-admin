@@ -24,7 +24,14 @@ export const GET = async (
       );
     }
 
-    return NextResponse.json(product, { status: 200 });
+    return NextResponse.json(product, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": `${process.env.ECOMMERCE_STORE_URL}`,
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
   } catch (err) {
     console.log("[productId_GET]", err);
     return new NextResponse("Internal error", { status: 500 });
@@ -118,8 +125,7 @@ export const POST = async (
     ).populate({ path: "collections", model: Collection });
 
     await updateProduct.save();
-    return NextResponse.json(updateProduct, { status: 200 })
-
+    return NextResponse.json(updateProduct, { status: 200 });
   } catch (err) {
     console.log("[productId_POST", err);
     return new NextResponse("Internal error", { status: 500 });
