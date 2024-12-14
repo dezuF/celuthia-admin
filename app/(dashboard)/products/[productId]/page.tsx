@@ -2,9 +2,9 @@
 
 import Loader from '@/components/custom ui/Loader';
 import ProductForm from '@/components/products/ProductForm';
-import { useEffect, useState } from 'react'
+import React,{ useEffect, useState } from 'react'
 
-const ProductDetails = ( {params } : {params: {productId: string }}) => {
+const ProductDetails = ({ params }: { params: { productId: string }}) => {
     const [loading, setLoading] = useState(true)
     const [productDetails, setProductDetails] =
     useState<ProductType | null>(null);

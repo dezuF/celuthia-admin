@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import Delete from "../custom ui/Delete"
 import Link from "next/link";
 
-export const columns: ColumnDef<CollectionType>[] = [//collectiontype es del archivo lib:types.d.ts
+export const columns: ColumnDef<CollectionType>[] = [
     {
       accessorKey: "title",
       header: "Title",

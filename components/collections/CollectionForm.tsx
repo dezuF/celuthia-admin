@@ -38,14 +38,17 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
-      title: "",
-      description: "",
-      image: "",
-    },
+    defaultValues: initialData
+      ? initialData
+      : {
+          title: "",
+          description: "",
+          image: "",
+        },
   });
 
-  const handleKeyPress = (e: React.KeyboardEvent <HTMLInputElement> | React.KeyboardEvent <HTMLTextAreaElement> ) => {
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
     }
@@ -59,24 +62,19 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
         ? `/api/collections/${initialData._id}` 
         : "/api/collections"; 
 
-      const method = initialData ? "PUT" : "POST"; 
+        const res = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(values),
+        });
+  
 
-      const res = await fetch(url, {
-        method: "POST", 
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values), 
-      });
-
-      if (res.ok) {
-        setLoading(false);
-        toast.success(`Collection ${initialData ? "updated" : "created"}`);
-        window.location.href= "/collections";
-        router.push("/collections"); 
-      } else {
-        setLoading(false);
-        const error = await res.json();
-        toast.error(error.message || "Something went wrong! Please try again.");
-      }
+        if (res.ok) {
+          setLoading(false);
+          toast.success(`Collection ${initialData ? "updated" : "created"}`);
+          window.location.href = "/collections";
+          router.push("/collections");
+        }
+  
     } catch (err) {
       console.error("[CollectionForm Error]:", err);
       setLoading(false);
@@ -89,7 +87,7 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
       {initialData ? (
         <div className="flex items-center justify-between">
           <p className="text-heading2-bold">Edit Collection</p>
-          <Delete id={initialData._id} item="cocollection" />
+          <Delete id={initialData._id} item="collection" />
         </div>
       ) : (
         <p className="text-heading2-bold">Create Collection</p>

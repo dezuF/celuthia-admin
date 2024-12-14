@@ -5,7 +5,7 @@ const customerSchema = new mongoose.Schema({
   name: String,
   email: String,
   orders: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order"}]
   },
   createdAt: {
     type: Date,

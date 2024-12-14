@@ -2,11 +2,7 @@ import Customer from "@/lib/models/Customer";
 import Order from "@/lib/models/Order";
 import { connectToDB } from "@/lib/mongoDB";
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-export const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!, {
-  typescript: true,
-});
+import { stripe } from "@/lib/stripe";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -21,7 +17,6 @@ export const POST = async (req: NextRequest) => {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
-      console.log("[webhooks_POST", session)
 
       const customerInfo = {
         clerkId: session?.client_reference_id,
