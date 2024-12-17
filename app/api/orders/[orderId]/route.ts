@@ -6,20 +6,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { orderId: String } }
+  context: { params: Promise<{ orderId: string }> }
 ) => {
   try {
     await connectToDB();
 
-    const orderDetails = await Order.findById(params.orderId).populate({
+    const { orderId } = await context.params;
+
+    const orderDetails = await Order.findById(orderId).populate({
       path: "products.product",
       model: Product,
     });
 
     if (!orderDetails) {
-      return new NextResponse(JSON.stringify({ message: "Order Not Found" }), {
-        status: 404,
-      });
+      return NextResponse.json({ message: "Order Not Found" }, { status: 404 });
     }
 
     const customer = await Customer.findOne({
@@ -28,7 +28,7 @@ export const GET = async (
 
     return NextResponse.json({ orderDetails, customer }, { status: 200 });
   } catch (err) {
-    console.log("[orderId_GET]", err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error("[orderId_GET]", err);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 };

@@ -4,16 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { query: string } }
+  context: { params: Promise<{ query: string }> }
 ) => {
   try {
     await connectToDB();
 
+    const {query} = await context.params;
+
     const searchedProducts = await Product.find({
       $or: [
-        { title: { $regex: params.query, $options: "i" } },
-        { category: { $regex: params.query, $options: "i" } },
-        { tags: { $in: [new RegExp(params.query, "i")] } },
+        { title: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+        { tags: { $in: [new RegExp(query, "i")] } },
       ],
     });
 

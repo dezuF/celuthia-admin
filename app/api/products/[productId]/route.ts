@@ -7,12 +7,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  context: { params: Promise<{ productId: string }> }
 ) => {
   try {
     await connectToDB();
 
-    const product = await Product.findById(params.productId).populate({
+    const { productId } = await context.params;
+    const product = await Product.findById(productId).populate({
       path: "collections",
       model: Collection,
     });
@@ -40,7 +41,7 @@ export const GET = async (
 
 export const POST = async (
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  context: { params: Promise<{ productId: string }> }
 ) => {
   try {
     const { userId } = await auth();
@@ -51,7 +52,9 @@ export const POST = async (
 
     await connectToDB();
 
-    const product = await Product.findById(params.productId);
+    const {productId} = await context.params;
+
+    const product = await Product.findById(productId);
 
     if (!product) {
       return new NextResponse(
@@ -82,23 +85,18 @@ export const POST = async (
     const addedCollections = collections.filter(
       (collectionId: string) => !product.collections.includes(collectionId)
     );
-    // included in new data, but not included in the previous data
 
     const removedCollections = product.collections.filter(
       (collectionId: string) => !collections.includes(collectionId)
     );
-    // included in previous data, but not included in the new data
 
-    // Update collections
     await Promise.all([
-      // Update added collections with this product
       ...addedCollections.map((collectionId: string) =>
         Collection.findByIdAndUpdate(collectionId, {
           $push: { products: product._id },
         })
       ),
 
-      // Update removed collections without this product
       ...removedCollections.map((collectionId: string) =>
         Collection.findByIdAndUpdate(collectionId, {
           $pull: { products: product._id },
@@ -106,9 +104,8 @@ export const POST = async (
       ),
     ]);
 
-    //update product
     const updateProduct = await Product.findByIdAndUpdate(
-      params.productId,
+      productId,
       {
         title,
         description,
@@ -134,7 +131,7 @@ export const POST = async (
 
 export const DELETE = async (
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  context: { params: Promise<{ productId: string }> }
 ) => {
   try {
     const { userId } = await auth();
@@ -144,8 +141,9 @@ export const DELETE = async (
     }
 
     await connectToDB();
+    const {productId} = await context.params;
 
-    const product = await Product.findById(params.productId);
+    const product = await Product.findById(productId);
 
     if (!product) {
       return new NextResponse(
