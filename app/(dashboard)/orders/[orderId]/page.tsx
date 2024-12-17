@@ -1,9 +1,14 @@
 import { DataTable } from "@/components/custom ui/DataTable";
 import { columns } from "@/components/OrderItems/OrderItemsColums";
 
-const OrderDetails = async ({ params }: { params: { orderId: string } }) => {
+interface Params {
+  orderId: string;
+}
+
+const OrderDetails = async ({ params }: { params: Promise<Params> }) => {
+  const { orderId } = await params;
   const res = await fetch(
-    `${process.env.ADMIN_DASHBOARD_URL}/api/orders/${params.orderId}`
+    `${process.env.ADMIN_DASHBOARD_URL}/api/orders/${orderId}`
   );
   const { orderDetails, customer } = await res.json();
 
